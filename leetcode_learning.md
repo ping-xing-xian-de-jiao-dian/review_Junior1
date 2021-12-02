@@ -921,3 +921,81 @@ public:
 };
 ```
 
+
+
+### 剑指 Offer 45. 把数组排成最小的数
+
+> 输入一个非负整数数组，把数组里所有数字拼接起来排成一个数，打印能拼接出的所有数字中最小的一个。
+
+如何让拼出来的数字最小？如何确定每个字符的优先级？
+
+其实这可以看作是一个子问题，两个数拼成最小字符串，只需要**两个数交换相连比较一下**就好了（cmp的“新”用法！）
+
+实在无法用逻辑来判断的地方，用实践就可以
+
+```c++
+class Solution {
+public:
+    static bool cmp(string& a, string& b){
+        return a + b < b + a;
+    }
+
+    string minNumber(vector<int>& nums) {
+        size_t len = nums.size();
+        vector<string> nums2(len);
+        for (int i = 0; i < len; ++i){
+            nums2[i] = to_string(nums[i]);
+        }
+        sort(nums2.begin(), nums2.end(), cmp);
+        string res;
+        for (string s : nums2) res += s;
+        return res;
+    }
+};
+```
+
+
+
+### 剑指 Offer 46. 把数字翻译成字符串
+
+> 给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+
+动态规划上楼梯，多一个判断的条件，注意不要想得太简单了，动规都得多想想
+
+可以进一步优化掉dp数组，变成3个变量dp0，dp1和dp2
+
+```c++
+class Solution {
+public:
+    int translateNum(int num) {
+        int origin = num, len = 0;
+        while (origin){
+            ++len;
+            origin /= 10;
+        }
+        if (len <= 1) return 1;
+        vector<int> nums(len), dp(len);
+        int pos = len - 1;
+        while (num){
+            nums[pos--] = num % 10;
+            num /= 10;
+        }
+        dp[0] = 1;
+        if (nums[0] == 0) dp[1] = 1;
+        else if (nums[0] * 10 + nums[1] > 25) dp[1] = 1;
+        else dp[1] = 2;
+
+        for (int i = 2; i < len; ++i){
+            if (nums[i - 1]){
+                int temp = nums[i - 1] * 10 + nums[i];
+                if (temp >= 10 && temp <= 25) dp[i] = dp[i - 1] + dp[i - 2];
+                else dp[i] = dp[i - 1];
+            } else {
+                dp[i] = dp[i - 1];
+            }
+        }
+        return dp[len - 1];
+    }
+};
+```
+

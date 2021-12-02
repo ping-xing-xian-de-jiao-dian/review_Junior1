@@ -559,6 +559,8 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
   0是偶地址，1是奇地址
 
+  0，00010000~00011111
+
   <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130221458425.png" alt="image-20211130221458425" style="zoom:80%;" />
 
   例，中断类型号20H\~28H，就是**00100**000\~**00100**111
@@ -585,9 +587,11 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
   设置特殊屏蔽：变成特殊屏蔽方式（级联主片）
 
-  2和3可以通过D~3~来判断
+  查询状态，设D~2~为1
 
-- ```assembly
+  OCW2和3可以通过D~3~来判断
+
+  ```assembly
   ; 设8259的IO接口地址为80H，81H
   ; 读ISR
   MOV	AL, 00001011B
@@ -599,6 +603,173 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
   IN	AL, 80H
   ; 读IMR不需要设OCW3，直接读奇地址即可
   IN	AL, 81H
+  ```
+
+- **8259的编程（状态字）**
+
+  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211201163808344.png" alt="image-20211201163808344" style="zoom:80%;" />
+
+  D~7~为1表示有中断请求，对应编号为D~0~\~D~2~表示的编码
+
+  **读状态字要先写OCW3**，再用IN读出来
+
+```assembly
+; 设单片8259定义为完全嵌套、非自动结束方式、边沿触发，中断类型08H~0FH，端口地址20H~21H，编写初始化程序
+
+; ICW1，偶地址
+MOV	AL, 00010011B
+OUT	20H, AL
+; ICW2，奇地址
+MOV	AL, 00001000B
+OUT	21H, AL
+; ICW4，奇地址
+MOV	AL, 00000001B
+OUT	21H, AL
+```
+
+- 例子
+
+  某系统中设置两片8259实现中断控制，它们之间采用级联方式连接，从8259的INT端与主8259的IR3相连
+
+  已知当前主8259的IR0和IR5端分别引入两个中断请求，从8259的IR2和IR3端分别引入两个中断请求
+
+  设主8259引入的中断类型码为40H\~47H，IO地址0FFE8H，0FFE9H，中断入口地址已装入矢量表
+
+  从8259引入的中断类型码为30\~37H，IO地址0FFFAH，0FFFBH，中断入口地址已装入矢量表
+
+  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211201170810850.png" alt="image-20211201170810850" style="zoom:80%;" />
+
+  ```assembly
+  ; 主8259初始化
+  ; ICW1
+  MOV	AL, 00010001B
+  MOV	DX, 0FFE8H			; 不能直接OUT，因为地址超过0FFH
+  OUT	DX, AL
+  
+  ; ICW2
+  MOV	AL, 01000000B
+  MOV	DX, 0FFE9H
+  OUT	DX, AL
+  
+  ; ICW3
+  MOV	AL, 08H
+  OUT	DX, AL
+  
+  ; ICW4
+  MOV	AL, 11H
+  OUT	DX, AL
+  
+  
+  ; OCW1，中断屏蔽字，悬空的口屏蔽掉
+  MOV	AL, 0D6H
+  OUT	DX, AL
+  
+  ; OCW2，普通EOI结束，防止前面有中断没关
+  MOV	AL, 20H
+  MOV DX, 0FFF8H
+  OUT	DX, AL
+  ```
+
+  从片和主片初始化类似
+
+- 难中难
+
+  中断请求信号以跳变方式由IR2引入，编写程序，当CPU响应IR2请求时，输出显示字符串“ASDASD”，中断10次后退出
+
+  设8259的IO地址为20H，21H，**中断类型号0AH，从IR2引入**
+
+  ```assembly
+  DATA SEGMENT
+  MESS DB 'ASDASD', 0AH, 0DH, '$'
+  INTA00	EQU 0020H
+  INTA01	EQU 0021H
+  DATA ENDS
+  
+  ; 只要有中断，就要有堆栈
+  STACK SEGMENT STACK
+  STA	DB 100H DUP(?)
+  TOP	EQU LENGTH STA
+  STACK ENDS
+  
+  CODE SEGMENT
+  ASSUME CS:CODE, DS:DATA, SS:STACK
+  MAIN:
+  MOV	AX, DATA
+  MOV	DS, AX
+  ; 装入SS、SP
+  MOV	AX, STACK
+  MOV	SS, AX
+  MOV	SP, TOP
+  
+  ; 8259初始化
+  ; ICW1
+  MOV	DX, INTA00
+  MOV	AL, 13H
+  OUT	DX, AL
+  ; ICW2
+  MOV	DX, INTA01
+  MOV	AL, 08H		; 要求0AH，不过08H已经能包含了
+  OUT	DX, AL
+  ; ICW4
+  MOV	AL, 01H
+  OUT	DX, AL
+  
+  ; 中断服务程序，DS:DX
+  PUSH DS
+  MOV	AX, SEG INT-P	; 设置中断矢量
+  MOV	DS, AX
+  MOV	DX, OFFSET INT-P
+  MOV AL, 0AH			; 要编的类型号
+  MOV AH, 25H
+  INT 21H
+  POP DS
+  ; 发生IR2中断（因为只有一个IR2），会自动到中断矢量0AH来
+  
+  ; 写中断屏蔽字OCW1，不用的屏蔽
+  MOV	AL, 0FBH
+  OUT DX, AL
+  
+  ; 中断结束方式OCW2，防止之前中断没结束
+  MOV	DX, INTA00
+  MOV	AL, 20H			; 普通中断结束
+  OUT DX, AL
+  
+  
+  ; 中断要做的事情
+  MOV	BX, 1O
+  WAIT:
+  STI			; 开中断
+  JMP	WAIT	; 等待中断
+  
+  INT-P:
+  MOV	AX, DATA	; 中断服务程序入口，保险起见再装一次
+  MOV	DS, AX
+  MOV	DX, OFFSET MESS		; 输出字符串
+  MOV	AH, 09H
+  INT 21H
+  ; 送中断结束命令EOI
+  MOV	DX, INTA00
+  MOV	AL, 20H
+  OUT	DX, AL
+  
+  DEC	BX
+  JNZ NEXT
+  
+  ; 读屏蔽寄存器IMR，中断10次后屏蔽IR2请求
+  MOV	DX, INTA01
+  IN	AL, DX
+  OR	AL, 04H		
+  OUT	DX, AL
+  STI				; 开中断
+  MOV	AX, 4C00H
+  INT	21H
+  
+  NEXT:
+  ; 中断返回
+  IRET
+  
+  CODE ENDS
+  	 END MAIN
   ```
 
   
