@@ -89,7 +89,7 @@
 
 ## IP数据报
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129135912665.png" alt="image-20211129135912665" style="zoom:80%;" />
+<img src="network_learning.assets/image-20211129135912665.png" alt="image-20211129135912665" style="zoom:80%;" />
 
 - 版本号：IPV4和IPV6
 
@@ -144,7 +144,7 @@
 
 - 最大传输单元（MTU）：IP分组需要封装在链路层的数据帧里，不同数据帧对封装的数据是有限制的，**不同链路MTU不同**
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129141904374.png" alt="image-20211129141904374" style="zoom:80%;" />
+  <img src="network_learning.assets/image-20211129141904374.png" alt="image-20211129141904374" style="zoom:80%;" />
 
   如果从较大MTU传输到较小MTU怎么办呢？
 
@@ -235,7 +235,7 @@
 
 - “有类”编址
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129190635627.png" alt="image-20211129190635627" style="zoom:80%;" />
+  <img src="network_learning.assets/image-20211129190635627.png" alt="image-20211129190635627" style="zoom:80%;" />
 
   D类地址用来命名、标识一组主机，这些主机理论上能分布在互联网每一个地方，只能向这类地址发送消息，这类地址叫做多播/组播地址
 
@@ -245,7 +245,7 @@
 
   > #### 特殊IP地址
   >
-  > <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129191052538.png" alt="image-20211129191052538" style="zoom:70%;" />
+  > <img src="network_learning.assets/image-20211129191052538.png" alt="image-20211129191052538" style="zoom:70%;" />
   >
   > 环回地址：发送的IP分组不会离开主机，到了网络层后又回到该主机
   >
@@ -253,7 +253,7 @@
   >
   > 只用于内部网络，在公共互联网上是无效的
   >
-  > <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129193826922.png" alt="image-20211129193826922" style="zoom:40%;" />
+  > <img src="network_learning.assets/image-20211129193826922.png" alt="image-20211129193826922" style="zoom:40%;" />
 
 
 
@@ -263,7 +263,7 @@
 
 AB类网络太大了，还是需要用路由器，因此需要进行子网划分
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129194534401.png" alt="image-20211129194534401" style="zoom:67%;" />
+<img src="network_learning.assets/image-20211129194534401.png" alt="image-20211129194534401" style="zoom:67%;" />
 
 - 子网掩码
 
@@ -313,7 +313,7 @@ AB类网络太大了，还是需要用路由器，因此需要进行子网划分
   3. 提高了IPv4地址空间分配效率（不浪费）
   4. 提高路由效率：将多个子网聚合为一个较大的子网（路由聚合），**省了路由器转发表的空间**
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211129203559125.png" alt="image-20211129203559125" style="zoom:70%;" />
+  <img src="network_learning.assets/image-20211129203559125.png" alt="image-20211129203559125" style="zoom:70%;" />
 
   **最长前缀匹配优先**避免因地址不连续产生黑洞现象
 
@@ -325,7 +325,7 @@ AB类网络太大了，还是需要用路由器，因此需要进行子网划分
 
   1. 硬编码（静态配置）：IP地址、子网掩码、默认网关（确定送出的默认接口，如下）
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203182425609.png" alt="image-20211203182425609" style="zoom:70%;" />
+     <img src="network_learning.assets/image-20211203182425609.png" alt="image-20211203182425609" style="zoom:70%;" />
 
   2. **动态主机配置协议**（DHCP，Dynamic Host Configuration Protocol）
 
@@ -348,7 +348,7 @@ AB类网络太大了，还是需要用路由器，因此需要进行子网划分
      >
      > 4. DHCP服务器分配IP地址“DHCP ack”（确认报文）
      >
-     > <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203183911786.png" alt="image-20211203183911786" style="zoom:80%;" />
+     > <img src="network_learning.assets/image-20211203183911786.png" alt="image-20211203183911786" style="zoom:80%;" />
      >
      > **示意图（注意IP地址的变化）**
 
@@ -365,7 +365,7 @@ AB类网络太大了，还是需要用路由器，因此需要进行子网划分
 
 私有地址不能在公共互联网被识别，因此需要转换
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203191537385.png" alt="image-20211203191537385" style="zoom:70%;" />
+<img src="network_learning.assets/image-20211203191537385.png" alt="image-20211203191537385" style="zoom:70%;" />
 
 - 动机
 
@@ -440,11 +440,11 @@ IP数据报传输会出差错，ICMP向发送该报文的源主机发送一条IC
 
   ICMP报文封装到IP数据报中传输
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203202714586.png" alt="image-20211203202714586" style="zoom:70%;" />
+  <img src="network_learning.assets/image-20211203202714586.png" alt="image-20211203202714586" style="zoom:70%;" />
 
   IP数据报格式
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203203008284.png" alt="image-20211203203008284" style="zoom:70%;" />
+  <img src="network_learning.assets/image-20211203203008284.png" alt="image-20211203203008284" style="zoom:70%;" />
 
 - 应用举例（**Traceroute**）
 
@@ -468,7 +468,7 @@ IP数据报传输会出差错，ICMP向发送该报文的源主机发送一条IC
   1. 固定长度40字节基本首部
   2. 不允许分片（如果分片，源主机分）
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203205029019.png" alt="image-20211203205029019" style="zoom:70%;" />
+  <img src="network_learning.assets/image-20211203205029019.png" alt="image-20211203205029019" style="zoom:70%;" />
 
   - 优先级：标识数据报的优先级，区别对待不同类型的数据报（类似于IPv4的TOS）
   - 流标签：标识同一“流”中的数据报（从源主机到目的主机的线路称为流）
@@ -504,7 +504,7 @@ IP数据报传输会出差错，ICMP向发送该报文的源主机发送一条IC
 
 ### 例题
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203212532041.png" alt="image-20211203212532041" style="zoom:70%;" />
+<img src="network_learning.assets/image-20211203212532041.png" alt="image-20211203212532041" style="zoom:70%;" />
 
 1. 子网1: 202.118.1.0/25
 
@@ -512,7 +512,7 @@ IP数据报传输会出差错，ICMP向发送该报文的源主机发送一条IC
 
 2. 看清题目，写的是R1的路由表，**互联网的比较特殊，缺省路由，一个都匹配不成功，前面有提到过！**
 
-   <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211203215333933.png" alt="image-20211203215333933" style="zoom:70%;" />
+   <img src="network_learning.assets/image-20211203215333933.png" alt="image-20211203215333933" style="zoom:70%;" />
 
    | 目的网络IP地址 | 子网掩码        | 下一跳IP地址 | 接口 |
    | -------------- | --------------- | ------------ | ---- |

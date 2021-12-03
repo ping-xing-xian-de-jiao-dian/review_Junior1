@@ -6,7 +6,7 @@
   3. 数据：CPU与外设之间交换的信息
 - 单片机就是把CPU、存储器和IO都集成到一块了，所以不需要接口
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125172845938.png" alt="image-20211125172845938" style="zoom:55%;" />
+<img src="assembly_learning.assets/image-20211125172845938-16385469617261.png" alt="image-20211125172845938" style="zoom:55%;" />
 
 - 接口存在的必要（功能）
   1. **缓冲数据的传送功能**：CPU的速度太快，外设（如键盘）一秒钟就敲几次键，而CPU运行上亿次，匹配不了
@@ -57,15 +57,15 @@
 
 - 结构和引脚信号
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125183035701.png" alt="image-20211125183035701" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125183035701-16385469641282.png" alt="image-20211125183035701" style="zoom:80%;" />
 
   PA、PB、PC三个并行口
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125183201367.png" alt="image-20211125183201367" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125183201367-16385469652733.png" alt="image-20211125183201367" style="zoom:80%;" />
 
   左边CPU，右边IO接口
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125183446184.png" alt="image-20211125183446184" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125183446184-16385470138157.png" alt="image-20211125183446184" style="zoom:80%;" />
 
 - 三种工作方式
 
@@ -98,9 +98,9 @@
 
         INTEA（PC4）：禁止中断，PC4输入时是STB，输出时是中断允许 
 
-        <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125184929544.png" alt="image-20211125184929544" style="zoom:80%;" />
+        <img src="assembly_learning.assets/image-20211125184929544-16385469681585.png" alt="image-20211125184929544" style="zoom:80%;" />
 
-        <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125185145021.png" alt="image-20211125185145021" style="zoom:80%;" />
+        <img src="assembly_learning.assets/image-20211125185145021-16385469692336.png" alt="image-20211125185145021" style="zoom:80%;" />
 
      2. 方式1输入：B口
 
@@ -120,7 +120,7 @@
 
      输入、输出、中断的握手线都要有，查询、中断都可以实现。PC剩下的管脚可以作为输入输出
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125190048276.png" alt="image-20211125190048276" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125190048276-163854703319511.png" alt="image-20211125190048276" style="zoom:80%;" />
 
 - 8255A的编程
 
@@ -140,7 +140,7 @@
 
   2. 典中典
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125191646610.png" alt="image-20211125191646610" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125191646610-163854703085310.png" alt="image-20211125191646610" style="zoom:80%;" />
 
      ```assembly
      DATA SEGMENT
@@ -190,7 +190,7 @@
      >
      > 按键抖动问题：
      >
-     > <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125195934125.png" alt="image-20211125195934125" style="zoom:50%;" />
+     > <img src="assembly_learning.assets/image-20211125195934125-16385470282499.png" alt="image-20211125195934125" style="zoom:50%;" />
      >
      > 抖动通常为10ms，所以通常延时10ms再去读
 
@@ -202,15 +202,15 @@
 
 - 结构及管脚信号
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125200820554.png" alt="image-20211125200820554" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125200820554-163854703916912.png" alt="image-20211125200820554" style="zoom:80%;" />
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125200848244.png" alt="image-20211125200848244" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125200848244-163854704089013.png" alt="image-20211125200848244" style="zoom:80%;" />
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125200937402.png" alt="image-20211125200937402" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125200937402-163854704237914.png" alt="image-20211125200937402" style="zoom:80%;" />
 
   减到0时输出
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125201008195.png" alt="image-20211125201008195" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211125201008195-163854704405015.png" alt="image-20211125201008195" style="zoom:80%;" />
 
 - 定时和计数
 
@@ -221,37 +221,37 @@
 
   1. 方式0：计数结束中断
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125201606932.png" alt="image-20211125201606932" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125201606932-163854704575316.png" alt="image-20211125201606932" style="zoom:80%;" />
 
      写入工作方式，写入初值，方式0的门关闭再打开后是继续数数，计数完了OUT变为高电平，可以申请中断信号
 
   2. 方式1：单拍负脉冲（单脉冲发生器）
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125201856599.png" alt="image-20211125201856599" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125201856599-163854704721517.png" alt="image-20211125201856599" style="zoom:80%;" />
 
      方式1的门关闭再打开后是重新计数，用于做单脉冲的发生器（就发一个，完事了）
 
   3. 方式2：频率发生器（分频器，速率波发生器）
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125202006091.png" alt="image-20211125202006091" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125202006091-163854704845718.png" alt="image-20211125202006091" style="zoom:80%;" />
 
      初值重复装入，连续发负脉冲，宽度是一个周期的宽度，门关闭后停止计数，打开后重新计数，用于发负脉冲序列
 
   4. 方式3：方波发生器（最常见）
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125202234052.png" alt="image-20211125202234052" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125202234052-163854704980419.png" alt="image-20211125202234052" style="zoom:80%;" />
 
      初值重复有效，重复周期一半低电平，一半高电平，初值为奇数时高电平加一个。可以分频，所以几乎可以覆盖所有频率的计数
 
   5. 方式4：软件触发方式
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125202409536.png" alt="image-20211125202409536" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125202409536-163854705091920.png" alt="image-20211125202409536" style="zoom:80%;" />
 
      初值一次有效，计数完后输出一个周期的负脉冲，门关闭再打开重新计数
 
   6. 方式5：硬件触发方式
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125202502682.png" alt="image-20211125202502682" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125202502682-163854705202821.png" alt="image-20211125202502682" style="zoom:80%;" />
 
      门开一下就开始计数，通过管脚触发，输出端输出一个周期的负脉冲
 
@@ -286,7 +286,7 @@
 
   3. 典中典
 
-     <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211125203852669.png" alt="image-20211125203852669" style="zoom:80%;" />
+     <img src="assembly_learning.assets/image-20211125203852669-163854705346222.png" alt="image-20211125203852669" style="zoom:80%;" />
 
      三个通道一个一个看
 
@@ -376,7 +376,7 @@
 
   存放中断服务程序入口地址的存储空间（存储器00000H~003FFH，共1K字节）
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130190515159.png" alt="image-20211130190515159" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130190515159-163854705605723.png" alt="image-20211130190515159" style="zoom:80%;" />
 
   中断号 × 4 = 入口地址
 
@@ -403,7 +403,7 @@
 
      将压栈的断点从堆栈中弹出，开中断，CPU转向中断的主程序继续执行
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130192436298.png" alt="image-20211130192436298" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130192436298-163854705760024.png" alt="image-20211130192436298" style="zoom:80%;" />
 
 - 和中断相关的指令
 
@@ -468,7 +468,7 @@
 
 ## 8259
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130195530661.png" alt="image-20211130195530661" style="zoom:80%;" />
+<img src="assembly_learning.assets/image-20211130195530661-163854705997025.png" alt="image-20211130195530661" style="zoom:80%;" />
 
 INTA：中断响应
 
@@ -476,7 +476,7 @@ INT：中断，连INTR
 
 IR：中断请求
 
-<img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130195922377.png" alt="image-20211130195922377" style="zoom:80%;" />
+<img src="assembly_learning.assets/image-20211130195922377-163854706110626.png" alt="image-20211130195922377" style="zoom:80%;" />
 
 CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
@@ -486,7 +486,7 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
 - 级联方式连接
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130200734939.png" alt="image-20211130200734939" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130200734939-163854706220427.png" alt="image-20211130200734939" style="zoom:80%;" />
 
   INT接IR
 
@@ -555,33 +555,33 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
 - **8259的编程（ICW初始化）**
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130221217161.png" alt="image-20211130221217161" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130221217161-163854706421128.png" alt="image-20211130221217161" style="zoom:80%;" />
 
   0是偶地址，1是奇地址
 
   0，00010000~00011111
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130221458425.png" alt="image-20211130221458425" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130221458425-163854706528829.png" alt="image-20211130221458425" style="zoom:80%;" />
 
   例，中断类型号20H\~28H，就是**00100**000\~**00100**111
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130221733840.png" alt="image-20211130221733840" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130221733840-163854706642730.png" alt="image-20211130221733840" style="zoom:80%;" />
 
   主片接了是1，没接是0；从片接的是几就写几
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130221831067.png" alt="image-20211130221831067" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130221831067-163854706739331.png" alt="image-20211130221831067" style="zoom:80%;" />
 
 - **8259的编程（OCW）**
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130222043418.png" alt="image-20211130222043418" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130222043418-163854706892832.png" alt="image-20211130222043418" style="zoom:80%;" />
 
   屏蔽字设置
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130222119480.png" alt="image-20211130222119480" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130222119480-163854707005933.png" alt="image-20211130222119480" style="zoom:80%;" />
 
   中断优先级和中断结束方式（001最常用，实在不会就写这个了）
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211130222351276.png" alt="image-20211130222351276" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211130222351276-163854707105934.png" alt="image-20211130222351276" style="zoom:80%;" />
 
   复位特殊屏蔽：就是改成普通屏蔽方式
 
@@ -607,7 +607,7 @@ CAS0\~CAS2，SP/EN，可以用作级联、扩展（000\~111，8个）
 
 - **8259的编程（状态字）**
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211201163808344.png" alt="image-20211201163808344" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211201163808344-163854707289735.png" alt="image-20211201163808344" style="zoom:80%;" />
 
   D~7~为1表示有中断请求，对应编号为D~0~\~D~2~表示的编码
 
@@ -637,7 +637,7 @@ OUT	21H, AL
 
   从8259引入的中断类型码为30\~37H，IO地址0FFFAH，0FFFBH，中断入口地址已装入矢量表
 
-  <img src="C:\Users\Dell\AppData\Roaming\Typora\typora-user-images\image-20211201170810850.png" alt="image-20211201170810850" style="zoom:80%;" />
+  <img src="assembly_learning.assets/image-20211201170810850-163854707401036.png" alt="image-20211201170810850" style="zoom:80%;" />
 
   ```assembly
   ; 主8259初始化
