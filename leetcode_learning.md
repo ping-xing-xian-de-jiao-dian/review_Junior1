@@ -1045,3 +1045,99 @@ public:
 };
 ```
 
+
+
+### 剑指 Offer 47. 礼物的最大价值
+
+> 在一个 m*n 的棋盘的每一格都放有一个礼物，每个礼物都有一定的价值（价值大于 0）。你可以从棋盘的左上角开始拿格子里的礼物，并每次向右或者向下移动一格、直到到达棋盘的右下角。给定一个棋盘及其上面的礼物的价值，请计算你最多能拿到多少价值的礼物？
+
+简单的矩阵路径动态规划，可以用一维数组优化空间：只记录上一行的dp值，每次比较上一行同位置和这一行左边一个的值大小，选取大的作为新值
+
+**tip：数组大小多开一个能让代码更简洁**
+
+```c++
+class Solution {
+public:
+    int maxValue(vector<vector<int>>& grid) {
+        int rows = grid.size(), cols = grid[0].size();
+        vector<int> dp(cols + 1);
+        for (int i = 1; i <= cols; ++i) dp[i] = dp[i - 1] + grid[0][i - 1];
+        for (int i = 1; i < rows; ++i){
+            for (int j = 1; j <= cols; ++j){
+                dp[j] = max(dp[j - 1], dp[j]) + grid[i][j - 1];
+            }
+        }
+        return dp[cols];
+    }
+};
+```
+
+
+
+### 剑指 Offer 48. 最长不含重复字符的子字符串
+
+> 请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+一个数组 + 两个赛跑的指针
+
+- 首先用begin和end确定首尾
+- 用fre数组记录在这个区间内的符号是否有重复
+- 如果end遇到了重复的符号，那么让begin往右走，并更新fre数组，直到begin到了与end值相同的右一位
+- 更新maxi长度
+
+**注：要特判（长度为0的字符串）和（以最后一个字符为结尾的子字符串）**
+
+```c++
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int begin = 0, end = 0;
+        size_t len = s.size();
+        if (!len) return 0;
+        int fre[256] = {0};
+        int maxi = 1;
+        while (end != len){
+            char e = s[end];
+            if (fre[e] == 1){
+                maxi = max(maxi, end - begin);
+                while (s[begin] != e){
+                    fre[s[begin]] = 0;
+                    ++begin;
+                }
+                ++begin;
+            }
+            fre[e] = 1;
+            ++end;
+        }
+        return max(maxi, end - begin);
+    }
+};
+```
+
+
+
+### 剑指 Offer 21. 调整数组顺序使奇数位于偶数前面
+
+> 输入一个整数数组，实现一个函数来调整该数组中数字的顺序，使得所有奇数在数组的前半部分，所有偶数在数组的后半部分。
+
+双指针，首尾各一个指针往中间移动，不符合条件的进行交换
+
+**&的优先级很低很低很低很低！！！！！！多加括号！！**
+
+```c++
+class Solution {
+public:
+    vector<int> exchange(vector<int>& nums) {
+        size_t len = nums.size();
+        int le = 0, ri = len - 1;
+        while (le < ri){
+            while (le < len && (nums[le] & 1)) ++le;
+            while (ri >= 0 && ((nums[ri] & 1) == 0)) --ri;
+            if (le < ri) swap(nums[le], nums[ri]);
+            else break;
+        }
+        return nums;
+    }
+};
+```
+
