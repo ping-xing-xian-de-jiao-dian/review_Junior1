@@ -1269,3 +1269,108 @@ public:
 };
 ```
 
+
+
+### *剑指 Offer 56 - I. 数组中数字出现的次数
+
+> 一个整型数组 `nums` 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+
+两个非重复数字出现在一群出现两次数的数组中
+
+- 首先我们容易得出这两个数字的异或结果`sum`
+- `sum`一定有某一位是1
+- 根据这一点，把原数组分为两个部分，**一部分是这位是1的，另一部分是这位不是1的**
+- 由于其它数字都能被异或成0，所以两部分会分别出一个数，也就是结果
+
+```c++
+class Solution {
+public:
+    vector<int> singleNumbers(vector<int>& nums) {
+        int sum = 0;
+        for (int num : nums) sum ^= num;
+        // sum一定有至少一位是1，因为存在不同的两数，所以我们找出1
+        // 这样就能把nums数组分为两部分，一部分里面只存在一个只出现一次的数
+        int border = 1;
+        while ((border & sum) == 0){
+            border <<= 1;
+        }
+        int a = 0, b = 0;
+        for (int num : nums){
+            if (num & border) a ^= num;
+            else b ^= num;
+        }
+        return {a, b};
+    }
+};
+```
+
+
+
+### 剑指 Offer 57. 和为s的两个数字
+
+> 输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+
+双指针
+
+从左右往中间夹逼（可以判重复直接掠过，在数据量大的情况下有优势）
+
+```c++
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int begin = 0, end = nums.size() - 1;
+        while (begin < end){
+            int sum = nums[begin] + nums[end];
+            if (sum == target) return {nums[begin], nums[end]};
+            if (sum > target){
+                do --end; while (nums[end] == nums[end - 1]);
+            } else {
+                do ++begin; while (nums[begin] == nums[begin + 1]);
+            }
+        }
+        return {0, 0};
+    }
+};
+```
+
+
+
+### 剑指 Offer 57 - II. 和为s的连续正数序列
+
+> 输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。
+>
+> 序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+
+本题采用数学方法，设$n$为累加开始的数字，$k$为累加的数字个数，$t$为目标数字，则有下列三个约束式
+$$
+\begin{cases}
+1+2+…+(k-1) \le t \\
+n \ge 1\\
+t=n+(n+1)+…+(n+k-1)
+\end{cases}
+$$
+由这三个约束式能解出$k$的取值范围，进而得到循环上下界，再用整数这一条件进行$n$的约束，就能得到结果
+
+```c++
+class Solution {
+public:
+    vector<vector<int>> findContinuousSequence(int target) {
+        // 2n + 1, 3n + 1 + 2, kn + 1 + 2 + ... + k - 1 = kn + k(k - 1) / 2
+        vector<vector<int>> res;
+        double maxi = min((sqrt(1 + 8 * target) + 1.) / 2, sqrt((-1 + 8 * target) + 1.) / 2);
+        int end = ceil(maxi);
+        for (int i = end; i >= 2; --i){
+            double temp = 1. * target / i - (i - 1) / 2.;
+            int itemp = int(temp);
+            if (!itemp) continue;
+            if (fabs(temp - itemp) < 1e-5){
+                vector<int> t(i);
+                for (int j = 0; j < i; ++j) t[j] = itemp + j;
+                res.emplace_back(t);
+            }
+        }
+        return res;
+    }
+};
+```
+
