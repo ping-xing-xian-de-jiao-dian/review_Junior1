@@ -1374,3 +1374,174 @@ public:
 };
 ```
 
+
+
+### 剑指 Offer 58 - I. 翻转单词顺序
+
+> 输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。
+
+- 先判断字符串是不是全为空格
+- 吃空格
+- 吃字符，吃完后push到栈中
+- 最后一个需要特判（或者在原字符串末尾加一个空格）
+
+```c++
+class Solution {
+public:
+    string reverseWords(string s) {
+        stack<string> res;
+        string temp;
+        int pos = 0;
+        size_t len = s.size();
+        while (pos != len && s[pos] == ' ') ++pos;
+        if (pos == len) return "";
+
+        while (pos != len){
+            while (pos != len && s[pos] == ' ') ++pos;
+            while (pos != len && s[pos] != ' '){
+                temp += s[pos++];
+            }
+            if (temp != "") res.push(temp);
+            temp = "";
+        }
+        if (temp != "") res.push(temp);
+        string ans;
+        while (res.size() != 1){
+            ans += res.top() += " ";
+            res.pop();
+        }
+        return ans += res.top();
+    }
+};
+```
+
+
+
+### *剑指 Offer 59 - I. 滑动窗口的最大值
+
+> 给定一个数组 `nums` 和滑动窗口的大小 `k`，请找出所有滑动窗口里的最大值。
+
+- deque是用来模拟滑动窗口的，但是由于位于较大值左边的较小值无意义，所以可以维护递增序列，让模拟的滑动窗口变成简化的滑动窗口
+- 是否要移除第一个元素需要判断下标（因为下标是定死的）
+- 每次的最大值都是队头下标对应的数
+
+```c++
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        // 位于较大值左边的较小值无意义
+        vector<int> res;
+        deque<int> dq;
+        for (int i = 0, len = nums.size(); i < len; ++i){
+            while (!dq.empty() && nums[i] >= nums[dq.back()]) dq.pop_back();
+            dq.push_back(i);
+            while (dq.front() < i - k + 1){
+                dq.pop_front();
+            }
+            if (i >= k - 1) res.emplace_back(nums[dq.front()]);
+        }
+        return res;
+    }
+};
+```
+
+
+
+### 剑指 Offer 60. n个骰子的点数
+
+> 把n个骰子扔在地上，所有骰子朝上一面的点数之和为s。输入n，打印出s的所有可能的值出现的概率。
+
+动态规划
+
+- dp\[i\]\[j\]表示i个骰子扔到j的可能性
+
+- dp\[i\]\[j\] = 【所有可能扔到的数字减去（1~6）】对应的【i - 1个骰子扔到该数字】的【概率乘六分之一】的【和】
+
+```c++
+class Solution {
+public:
+    vector<double> dicesProbability(int n) {
+        double dp[12][70] = {0};
+        for (int i = 1; i <= 6; ++i) dp[1][i] = 1. / 6;
+        for (int dice = 2; dice <= 11; ++dice){
+            for (int possibleNum = dice; possibleNum <= dice * 6; ++possibleNum){
+                for (int newNum = 1; newNum <= 6; ++newNum){
+                    if (possibleNum - newNum >= 0)
+                        dp[dice][possibleNum] += dp[dice - 1][possibleNum - newNum] * 1. / 6;
+                }
+            }
+        }
+        vector<double> res;
+        for (int i = 1; i < 70; ++i){
+            if (dp[n][i]) res.emplace_back(dp[n][i]);
+        }
+        return res;
+    }
+};
+```
+
+
+
+### 剑指 Offer 61. 扑克牌中的顺子
+
+> 从若干副扑克牌中随机抽 5 张牌，判断是不是一个顺子，即这5张牌是不是连续的。2～10为数字本身，A为1，J为11，Q为12，K为13，而大、小王为 0 ，可以看成任意数字。A 不能视为 14。
+
+排序 + 去重 + 快速判断
+
+- 如果没有重复元素，那么只要看**非零的最大值和最小值之间相差是否小于四**即可判断
+- 如果有重复元素，返回false
+
+```c++
+class Solution {
+public:
+    bool isStraight(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        int zeros = 0;
+        while (nums[zeros] == 0) ++zeros;
+        for (int i = zeros + 1; i < 5; ++i){
+            if (nums[i] == nums[i - 1]) return 0;
+        }
+        return nums[4] - nums[zeros] < 5;
+    }
+};
+```
+
+
+
+### 剑指 Offer 68 - II. 二叉树的最近公共祖先
+
+> 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+>
+> 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+
+方法为dfs，重点在如何判断要不要继续往下搜索
+
+- 用全局变量res保存目前的最近公共祖先
+- 返回值表示这个子树中有没有p或者q
+- **自底向上**
+- 第一种情况，左子树和右子树中均含有，那么这个结点一定是所求的
+- 第二种情况，本结点是p或q，其中一子树含有，那么这个结点一定是所求的
+- 第三种情况，只有一子树含有，那么继续往上走
+
+```c++
+class Solution {
+public:
+    TreeNode* res = nullptr;
+    bool dfs(TreeNode* root, TreeNode* p, TreeNode* q){
+        if (!root) return 0;
+        bool a = dfs(root->left, p, q);
+        bool b = dfs(root->right, p, q);
+        // p和q分别在左右子树
+        if (a && b) res = root;
+        // p和q一个是本结点，另一个是在左右子树中
+        else if ((p->val == root->val || q->val == root->val) && (a || b)) res = root;
+        return a || b || p->val == root->val || q->val == root->val;
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        dfs(root, p, q);
+        return res;
+    }
+};
+```
+
